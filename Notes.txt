@@ -1,0 +1,88 @@
+-> Installing Nodemon
+In console...
+npm init
+npm install --save-dev nodemon (it will install only for the dev not for deployment server)
+Inside package.json -  "start": "nodemon server.js"
+npm start
+
+-> Normal Server using the http module
+const http = require('http')
+const server = http.createServer((req,res)=>{
+    // console.log(req);
+    // console.log(req.method)
+    const {headers,url,method} = req
+    console.log(headers,url,method)
+    res.end()
+})
+const PORT = 5000
+server.listen(PORT,()=>{console.log(`Server running on Port : ${PORT}`)})
+
+-> Response from Server.js using the http module
+print plain text
+    res.setHeader('Content-Type','text/plain')
+    res.write('<h1>hello world</h1>')
+printing html
+    res.setHeader('Content-Type','text/html')
+    res.setHeader('X-Powered-By','node.js')
+    res.write('<h1>hello world</h1>')
+advanced sending
+const http = require('http')
+
+const todos = [
+    {id:1, text:'one'},
+    {id:2, text:'two'},
+    {id:3, text:'three'},
+    {id:4, text:'four'},
+]
+
+const server = http.createServer((req,res)=>{
+    res.setHeader('Content-Type','appliation/json')
+    res.setHeader('X-Powered-By','node.js')
+    res.write('<h1>hello world</h1>')
+    res.end(JSON.stringify({
+        success:true,
+        data:todos
+    }))
+})
+
+const PORT = 5000
+
+server.listen(PORT,()=>{console.log(`Server running on Port : ${PORT}`)})
+
+
+-> HTTP Status Codes
+    res.statusCode = 404
+    res.setHeader('Content-Type','appliation/json')
+    res.setHeader('X-Powered-By','node.js')
+cleaner way to write this
+    res.writeHead(404,{
+        'Content-Type':'appliation/json',
+        'X-Powered-By':'node.js'
+    })
+
+-> Sending data to the server in headers and body of the response
+const server = http.createServer((req,res)=>{
+
+    res.writeHead(200,{
+        'Content-Type':'appliation/json',
+        'X-Powered-By':'node.js'
+    })
+
+    let body =[]
+
+    req.on('data',chunk => {
+        body.push(chunk)
+    }).on('end',()=>{
+        body = Buffer.concat(body).toString();
+        console.log(body)
+    })
+
+    res.end(JSON.stringify({
+        success:true,
+        data:todos
+    }))
+})
+
+-> HTTP Request Methods
+GET, POST, PUT/PATCH, DELETE
+S
